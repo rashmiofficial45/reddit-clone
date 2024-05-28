@@ -40,7 +40,7 @@ const DropdownMenuBar = ({ userImage }: ProfileImage) => {
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <Link href="/profile">
