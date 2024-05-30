@@ -49,7 +49,7 @@ const DropdownMenuBar = ({ userImage }: ProfileImage) => {
               <span>Profile</span>
             </DropdownMenuItem>
           </Link>
-          <Link href="/create-community">
+          <Link href="/r/create">
             <DropdownMenuItem>
               <SquareChevronRight className="mr-2 h-4 w-4" />
               <span>Create Community</span>

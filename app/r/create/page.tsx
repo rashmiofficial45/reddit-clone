@@ -15,14 +15,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateUser } from "@/app/actions";
+import { createCommunity } from "@/app/actions";
 import Link from "next/link";
-import { SubmitButton } from "./SubmitButtons";
+import { SubmitButton } from "@/components/SubmitButtons";
 import { useFormState } from "react-dom";
 
-const settingSchema = z.object({
-  userName: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+const communitySchema = z.object({
+  name: z.string().min(2, {
+    message: "Community name must be at least 2 characters.",
   }),
 });
 
@@ -31,12 +31,8 @@ const initialState = {
   status: "",
 };
 
-const SettingsForm = ({
-  username,
-}: {
-  username: string | null | undefined;
-}) => {
-  const [state, formAction] = useFormState(updateUser, initialState);
+const CommunityForm = () => {
+  const [state, formAction] = useFormState(createCommunity, initialState);
   const { toast } = useToast();
   useEffect(() => {
     if (state?.status === "green") {
@@ -54,11 +50,10 @@ const SettingsForm = ({
       });
     }
   }, [state,toast]);
-  const normalizedUsername = username ?? "";
-  const form = useForm<z.infer<typeof settingSchema>>({
-    resolver: zodResolver(settingSchema),
+  const form = useForm<z.infer<typeof communitySchema>>({
+    resolver: zodResolver(communitySchema),
     defaultValues: {
-      userName: normalizedUsername,
+      name:"",
     },
   });
   //   function onSubmit(data: z.infer<typeof settingSchema>) {
@@ -68,18 +63,19 @@ const SettingsForm = ({
       <div className=" h-full w-1/2">
         <Form {...form}>
           <form action={formAction} className="space-y-8">
-            <h1 className=" mt-10 text-4xl">Settings</h1>
+            <h1 className=" mt-10 text-4xl">Create Community</h1>
             <FormField
               control={form.control}
-              name="userName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className=" text-xl">Username</FormLabel>
-                  <FormDescription>Enter new username!</FormDescription>
+                  <FormLabel className="text-xl">Commumity Name</FormLabel>
+                  <FormDescription>Create or Update Community Name!</FormDescription>
                   <FormControl>
                     <Input
-                      defaultValue={username ?? ""}
-                      placeholder="Enter Your New Username"
+                    // @ts-ignore
+                      defaultValue={name ?? ""}
+                      placeholder="Enter Your Community Name"
                       {...field}
                     />
                   </FormControl>
@@ -102,12 +98,12 @@ const SettingsForm = ({
             />
             <div className="flex w-full justify-end gap-2">
               <Button
-                className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                className="focus:outline-none text-white bg-rose-500 hover:bg-rose-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                 type="button"
               >
                 <Link href={"/"}>Cancel</Link>
               </Button>
-              <SubmitButton title="Change Username" color="green"/>
+              <SubmitButton title="Create Community" color="orange"/>
             </div>
           </form>
         </Form>
@@ -116,4 +112,4 @@ const SettingsForm = ({
   );
 };
 
-export default SettingsForm;
+export default CommunityForm;
