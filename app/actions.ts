@@ -99,7 +99,7 @@ export async function createCommunity(prevState: any, formData: FormData) {
     };
   }
 }
-export async function updateDescription(formData: FormData) {
+export async function updateDescription(prevState:any , formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   if (!user) {
