@@ -1,8 +1,13 @@
+"use client";
 import { Card } from "@/components/ui/card";
 import { BookOpen, Upload, Video } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TipTapEditor } from "@/components/TipTapEditor";
+import { Input } from "@/components/ui/input";
+import { SubmitButton } from "@/components/SubmitButtons";
+import { UploadDropzone } from "@/components/Uploadthing";
 
 export default async function CreatePost({
   params,
@@ -50,21 +55,44 @@ export default async function CreatePost({
             <TabsList className="grid grid-cols-2">
               <TabsTrigger className=" col-span-1" value="post">
                 {" "}
-                <Upload className="h-4"/>
+                <Upload className="h-4" />
                 Post
               </TabsTrigger>
               <TabsTrigger className=" col-span-1" value="file">
                 {" "}
-                <Video className="h-4"/>
+                <Video className="h-4" />
                 Images/Videos
               </TabsTrigger>
             </TabsList>
             <TabsContent value="post">
-              Make changes to your account here.
+              <Card className="p-4 ">
+                <label htmlFor="title">Title</label>
+                <Input
+                  className="focus-visible:ring-transparent"
+                  type="text"
+                ></Input>
+                <div className="mt-4">
+                  <TipTapEditor />
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <SubmitButton title="Create Post"></SubmitButton>
+                </div>
+              </Card>
             </TabsContent>
-
             <TabsContent value="file">
-              Change your password here.
+              <Card>
+                <UploadDropzone
+                  className="w-full ut-button:ut-readying:bg-orange-500 ut-button:ut-uploading:bg-orange-500 ut-button:ut-uploading:after:bg-orange-500  ut-button:bg-orange-500 ut-label:text-orange-500 "
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res: any) => {
+                    console.log(res);
+                  }}
+                  onUploadError={(error: Error) => {
+                    alert("Error");
+                    console.log(error);
+                  }}
+                />
+              </Card>
             </TabsContent>
           </Tabs>
         </div>

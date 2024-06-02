@@ -107,7 +107,7 @@ const SettingsForm = ({
               >
                 <Link href={"/"}>Cancel</Link>
               </Button>
-              <SubmitButton title="Change Username" color="green"/>
+              <SubmitButton title="Change Username"/>
             </div>
           </form>
         </Form>

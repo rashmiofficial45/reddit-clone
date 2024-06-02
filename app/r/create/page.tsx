@@ -103,7 +103,7 @@ const CommunityForm = () => {
               >
                 <Link href={"/"}>Cancel</Link>
               </Button>
-              <SubmitButton title="Create Community" color="orange"/>
+              <SubmitButton title="Create Community"/>
             </div>
           </form>
         </Form>
