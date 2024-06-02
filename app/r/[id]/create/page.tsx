@@ -68,7 +68,7 @@ export default async function CreatePost({
               <Card className="p-4 ">
                 <label htmlFor="title">Title</label>
                 <Input
-                  className="focus-visible:ring-transparent"
+                  className="focus-visible:ring-slate-400"
                   type="text"
                 ></Input>
                 <div className="mt-4">
