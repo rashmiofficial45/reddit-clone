@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { Card } from "@/components/ui/card";
 import { BookOpen, Upload, Video } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -8,36 +8,67 @@ import { TipTapEditor } from "@/components/TipTapEditor";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/SubmitButtons";
 import { UploadDropzone } from "@/components/Uploadthing";
-
-export default async function CreatePost({
+import { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+// import { useFormState } from "react-dom";
+// import { useToast } from "@/components/ui/use-toast";
+import { createPost } from "@/app/actions";
+import { JSONContent } from "@tiptap/react";
+const initialState = {
+  message: "",
+  status: "",
+};
+const rules = [
+  {
+    id: 1,
+    text: "Remember the human",
+  },
+  {
+    id: 2,
+    text: "Behave like you would in real life",
+  },
+  {
+    id: 3,
+    text: "Look for the original form of content",
+  },
+  {
+    id: 4,
+    text: "Search for duplication before posting",
+  },
+  {
+    id: 5,
+    text: "Read the community guidlines ",
+  },
+];
+export default function CreatePost({
   params,
 }: {
   params: {
     id: string;
   };
 }) {
-  const rules = [
-    {
-      id: 1,
-      text: "Remember the human",
-    },
-    {
-      id: 2,
-      text: "Behave like you would in real life",
-    },
-    {
-      id: 3,
-      text: "Look for the original form of content",
-    },
-    {
-      id: 4,
-      text: "Search for duplication before posting",
-    },
-    {
-      id: 5,
-      text: "Read the community guidlines ",
-    },
-  ];
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [json , setJson] = useState<JSONContent | null>(null)
+  const [title , setTitle] = useState<string | null>(null)
+  const createPostComm = createPost.bind(null , {jsonContent:json})
+  // const [state, formAction] = useFormState(createPostComm, initialState);
+  // const { toast } = useToast();
+  // useEffect(() => {
+  //   if (state?.status === "green") {
+  //     toast({
+  //       title: "Successful",
+  //       description: state.message,
+  //       variant: "default",
+  //     });
+  //   }
+  //   if (state?.status === "error") {
+  //     toast({
+  //       title: "Error",
+  //       description: state.message,
+  //       variant: "destructive",
+  //     });
+  //   }
+  // }, [state,toast]);  
   return (
     <div className="max-w-[1000px] flex mx-auto gap-x-10 mt-5">
       <div className="w-[65%]">
@@ -66,17 +97,27 @@ export default async function CreatePost({
             </TabsList>
             <TabsContent value="post">
               <Card className="p-4 ">
-                <label htmlFor="title">Title</label>
-                <Input
-                  className="focus-visible:ring-slate-400"
-                  type="text"
-                ></Input>
-                <div className="mt-4">
-                  <TipTapEditor />
-                </div>
-                <div className="mt-4 flex justify-end">
-                  <SubmitButton title="Create Post"></SubmitButton>
-                </div>
+                <form action={createPostComm}>
+                  <input type="hidden" value={params.id} name="cmtyName" />
+                  <input type="hidden" name="imageUrl" value={imageUrl ?? undefined} />
+                  <Label>Title</Label>
+                  <Input
+                    name="title"
+                    value={title ?? undefined}
+                    onChange={(e)=>{
+                      setTitle(e.target.value)
+                    }}
+                    required
+                    className="focus-visible:ring-slate-400"
+                    type="text"
+                  ></Input>
+                  <div className="mt-4">
+                    <TipTapEditor json={json} setJson={setJson} />
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <SubmitButton title="Create Post"></SubmitButton>
+                  </div>
+                </form>
               </Card>
             </TabsContent>
             <TabsContent value="file">
@@ -84,8 +125,8 @@ export default async function CreatePost({
                 <UploadDropzone
                   className="w-full ut-button:ut-readying:bg-orange-500 ut-button:ut-uploading:bg-orange-500 ut-button:ut-uploading:after:bg-orange-500  ut-button:bg-orange-500 ut-label:text-orange-500 "
                   endpoint="imageUploader"
-                  onClientUploadComplete={(res: any) => {
-                    console.log(res);
+                  onClientUploadComplete={(res) => {
+                    setImageUrl(res[0].url);
                   }}
                   onUploadError={(error: Error) => {
                     alert("Error");

@@ -23,6 +23,7 @@ model User {
   userName        String?     @unique
   createdAt       DateTime    @default(now())
   createCommunity Community[]
+  posts           Post[]
 }
 
 model Community {
@@ -32,5 +33,19 @@ model Community {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   User        User?    @relation(fields: [userId], references: [id])
+  userId      String?
+  posts       Post[]
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  title       String
+  textContent Json?
+  imageString String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Cmty        Community? @relation(fields: [cmtyName], references: [name])
+  cmtyName    String?
+  User        User?      @relation(fields: [userId], references: [id])
   userId      String?
 }

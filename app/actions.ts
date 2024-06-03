@@ -4,6 +4,7 @@ import prisma from "@/prisma/db";
 import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { JSONContent } from "@tiptap/react";
 
 export async function updateUser(prevState: any, formData: FormData) {
   const { getUser } = getKindeServerSession();
@@ -124,6 +125,41 @@ export async function updateDescription(prevState:any , formData: FormData) {
     console.error("Failed to Create community", error);
     return {
       message: "Failed to update description",
+      status: "error",
+    };
+  }
+}
+export async function createPost({jsonContent}:{
+    jsonContent: JSONContent | null
+}, formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+  if (!user) {
+    redirect("/api/auth/login");
+  }
+  const title = formData.get("title") as string;
+  const Community = formData.get("cmtyName") as string;
+  const imageUrl = formData.get("imageUrl") as string;
+
+  try {
+    const posts:any = await prisma.post.create({
+      data: {
+        title:title,
+        imageString:imageUrl ?? undefined,
+        cmtyName:Community,
+        textContent:jsonContent ?? undefined,
+        userId: user.id,
+      }
+    })
+    console.log(posts);
+    return {
+      message: "Post created successfully",
+      status: "green",
+  }
+  } catch (error) {
+    console.error("Failed to Create Post", error);
+    return {
+      message: "Failed to create post",
       status: "error",
     };
   }
