@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Card } from "@/components/ui/card";
 import { BookOpen, Upload, Video } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 // import { useToast } from "@/components/ui/use-toast";
 import { createPost } from "@/app/actions";
 import { JSONContent } from "@tiptap/react";
+import Image from "next/image";
 const initialState = {
   message: "",
   status: "",
@@ -48,9 +49,9 @@ export default function CreatePost({
   };
 }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [json , setJson] = useState<JSONContent | null>(null)
-  const [title , setTitle] = useState<string | null>(null)
-  const createPostComm = createPost.bind(null , {jsonContent:json})
+  const [json, setJson] = useState<JSONContent | null>(null);
+  const [title, setTitle] = useState<string | null>(null);
+  const createPostComm = createPost.bind(null, { jsonContent: json });
   // const [state, formAction] = useFormState(createPostComm, initialState);
   // const { toast } = useToast();
   // useEffect(() => {
@@ -68,7 +69,7 @@ export default function CreatePost({
   //       variant: "destructive",
   //     });
   //   }
-  // }, [state,toast]);  
+  // }, [state,toast]);
   return (
     <div className="max-w-[1000px] flex mx-auto gap-x-10 mt-5">
       <div className="w-[65%]">
@@ -99,13 +100,17 @@ export default function CreatePost({
               <Card className="p-4 ">
                 <form action={createPostComm}>
                   <input type="hidden" value={params.id} name="cmtyName" />
-                  <input type="hidden" name="imageUrl" value={imageUrl ?? undefined} />
+                  <input
+                    type="hidden"
+                    name="imageUrl"
+                    value={imageUrl ?? undefined}
+                  />
                   <Label>Title</Label>
                   <Input
                     name="title"
                     value={title ?? undefined}
-                    onChange={(e)=>{
-                      setTitle(e.target.value)
+                    onChange={(e) => {
+                      setTitle(e.target.value);
                     }}
                     required
                     className="focus-visible:ring-slate-400"
@@ -122,17 +127,31 @@ export default function CreatePost({
             </TabsContent>
             <TabsContent value="file">
               <Card>
-                <UploadDropzone
-                  className="w-full ut-button:ut-readying:bg-orange-500 ut-button:ut-uploading:bg-orange-500 ut-button:ut-uploading:after:bg-orange-500  ut-button:bg-orange-500 ut-label:text-orange-500 "
-                  endpoint="imageUploader"
-                  onClientUploadComplete={(res) => {
-                    setImageUrl(res[0].url);
-                  }}
-                  onUploadError={(error: Error) => {
-                    alert("Error");
-                    console.log(error);
-                  }}
-                />
+                {imageUrl === null ? (
+                  <UploadDropzone
+                    className="w-full ut-button:ut-readying:bg-orange-500 ut-button:ut-uploading:bg-orange-500 ut-button:ut-uploading:after:bg-orange-500  ut-button:bg-orange-500 ut-label:text-orange-500 "
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res) => {
+                      setImageUrl(res[0].url);
+                    }}
+                    onUploadError={(error: Error) => {
+                      alert("Error");
+                      console.log(error);
+                    }}
+                  />
+                ) : (
+                  <div className="py-6 px-0 flex-col items-center justify-center">
+                    <div className="text-center text-lg font-semibold">-- Preview --</div>
+
+                    <Image
+                      src={imageUrl}
+                      alt="uploaded Image"
+                      width={400}
+                      height={300}
+                      className="h-60 rounded-3xl object-contain w-full mt-2"
+                    />
+                  </div>
+                )}
               </Card>
             </TabsContent>
           </Tabs>

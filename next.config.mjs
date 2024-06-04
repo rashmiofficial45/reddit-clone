@@ -2,10 +2,16 @@
 const nextConfig = {
     images:{
         dangerouslyAllowSVG: true,
-        remotePatterns:[{
+        remotePatterns:[
+            {
             hostname:'avatar.vercel.sh',
             port:""
-        }],
+            },
+            {
+            hostname:'utfs.io',
+            port:""
+            }
+    ],
     }
 };
 

@@ -3,7 +3,6 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import prisma from "@/prisma/db";
 import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
-import { NextResponse } from "next/server";
 import { JSONContent } from "@tiptap/react";
 
 export async function updateUser(prevState: any, formData: FormData) {
